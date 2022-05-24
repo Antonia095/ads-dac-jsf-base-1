@@ -6,9 +6,6 @@ package br.edu.ifpb.infra;
  * @since 24/04/2022, 21:30:55
  */
 
-import br.edu.ifpb.domain.Livro;
-import br.edu.ifpb.domain.Livros;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

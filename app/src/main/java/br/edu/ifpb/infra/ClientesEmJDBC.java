@@ -1,7 +1,7 @@
 package br.edu.ifpb.infra;
 
-import br.edu.ifpb.domain.Editora;
-import br.edu.ifpb.domain.Editoras;
+import br.edu.ifpb.domain.Cliente;
+import br.edu.ifpb.domain.Clientes;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import java.util.logging.Logger;
  * @mail ricardo.job@ifpb.edu.br
  * @since 25/04/2022, 21:45:44
  */
-public class EditorasEmJDBC implements Editoras {
+public class ClientesEmJDBC implements Clientes {
 
    
     private Connection connection;
 
-    public EditorasEmJDBC() {
+    public ClientesEmJDBC() {
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(
@@ -28,7 +28,7 @@ public class EditorasEmJDBC implements Editoras {
                 "job","123"
             );
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(EditorasEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(ClientesEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
         }
 
     }
@@ -36,30 +36,32 @@ public class EditorasEmJDBC implements Editoras {
     
     
     @Override
-    public void nova(Editora editora) {
+    public void nova(Cliente cliente) {
         try {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO editoras(localDeOrigem, nomeFantasia) VALUES ( ?, ? );"
+                "INSERT INTO cliente(id,nome, cpf, dataNascimento) VALUES ( ?, ?, ?, ? );"
             );
-            statement.setString(1, editora.getLocalDeOrigem());
-            statement.setString(2, editora.getNomeFantasia());
+            statement.setInt(1,cliente.getId());
+            statement.setString(2, cliente.getNome());
+            statement.setDate(3,cliente.getDataDeNascimento());
+            statement.setString(4, cliente.getCpf());
             
             statement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(LivrosEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(ClientesEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
         }
     }
 
     @Override
-    public List<Editora> todas() {
+    public List<Cliente> todas() {
         try {
-            List<Editora> lista = new ArrayList<>();
+            List<Cliente> lista = new ArrayList<>();
             ResultSet result = connection.prepareStatement(
-                "SELECT * FROM editoras"
+                "SELECT * FROM clientes"
             ).executeQuery();
             while (result.next()) {
                 lista.add(
-                    criarEditoras(result)
+                    criarClientes(result)
                 );
             }
             return lista;
@@ -69,17 +71,17 @@ public class EditorasEmJDBC implements Editoras {
     }
 
     @Override
-    public List<Editora> porLocalDeOrigem(String localDeOrigem) {
+    public List<Cliente> porLocalDeOrigem(String localDeOrigem) {
         try {
-            List<Editora> lista = new ArrayList<>();
+            List<Cliente> lista = new ArrayList<>();
             PreparedStatement prepareStatement = connection.prepareStatement(
-                    "SELECT * FROM editoras WHERE localDeOrigem like ?"
+                    "SELECT * FROM cliente WHERE cpf like ?"
             );
             prepareStatement.setString(1, localDeOrigem);
             ResultSet result = prepareStatement.executeQuery();
             while (result.next()) {
                 lista.add(
-                        criarEditoras(result)
+                        criarClientes(result)
                 );
             }
             return lista;
@@ -88,12 +90,13 @@ public class EditorasEmJDBC implements Editoras {
         }
     }
 
-    private Editora criarEditoras(ResultSet result) throws SQLException {
-        String localDeOrigem = result.getString("localDeOrigem");
-        String nomeFantasia = result.getString("nomeFantasia");
-        int codigo = result.getInt("codigo");
+    private Cliente criarClientes(ResultSet result) throws SQLException {
+        int id = result.getInt("id");
+        String nome = result.getString("nome");
+        Date dateNascimento = result.getDate("dataNascimento");
+        String cpf = result.getString("cpf");
         
-        return new Editora(codigo,localDeOrigem,nomeFantasia);
+        return new Cliente(id,nome,dateNascimento,cpf);
     }
 
 }

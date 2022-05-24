@@ -1,8 +1,5 @@
 package br.edu.ifpb.infra;
 
-import br.edu.ifpb.domain.Livro;
-import br.edu.ifpb.domain.Livros;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

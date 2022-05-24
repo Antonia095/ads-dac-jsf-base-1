@@ -1,14 +1,14 @@
 package br.edu.ifpb.domain;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Cliente {
     private int id;
     private String nome;
-    private LocalDate dataDeNascimento;
+    private Date dataDeNascimento;
     private String cpf;
 
-    public Cliente(int id, String nome, LocalDate dataDeNascimento, String cpf) {
+    public Cliente(int id, String nome, Date dataDeNascimento, String cpf) {
         this.id = id;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
@@ -31,11 +31,11 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public LocalDate getDataDeNascimento() {
+    public Date getDataDeNascimento() {
         return dataDeNascimento;
     }
 
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {
+    public void setDataDeNascimento(Date dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
 

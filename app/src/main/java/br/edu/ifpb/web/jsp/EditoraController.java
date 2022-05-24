@@ -1,8 +1,8 @@
 package br.edu.ifpb.web.jsp;
 
-import br.edu.ifpb.domain.Editora;
-import br.edu.ifpb.domain.Editoras;
-import br.edu.ifpb.infra.EditorasEmJDBC;
+import br.edu.ifpb.domain.Cliente;
+import br.edu.ifpb.domain.Clientes;
+import br.edu.ifpb.infra.ClientesEmJDBC;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 // MCV - HTML (View) -> Servlet (Controller) -> Editora (Model)
 @WebServlet(name = "EditoraController", urlPatterns = "/editoras.do")
 public class EditoraController extends HttpServlet {
-    private Editoras editoras = new EditorasEmJDBC();
+    private Clientes editoras = new ClientesEmJDBC();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class EditoraController extends HttpServlet {
         //atendendo ao processamento
         String localDeOrigem = req.getParameter("localDeOrigem");
         String nomeFantasia = req.getParameter("nomeFantasia");
-        editoras.nova(new Editora(localDeOrigem, nomeFantasia));
+        clientes.nova(new Cliente(localDeOrigem, nomeFantasia));
         //redicionar à página
         resp.sendRedirect("editora.do"); //gerando uma nova requisição
     }
