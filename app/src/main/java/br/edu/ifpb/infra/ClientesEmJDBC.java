@@ -4,6 +4,7 @@ import br.edu.ifpb.domain.Cliente;
 import br.edu.ifpb.domain.Clientes;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +40,11 @@ public class ClientesEmJDBC implements Clientes {
     public void nova(Cliente cliente) {
         try {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO cliente(id,nome, cpf, dataNascimento) VALUES ( ?, ?, ?, ? );"
+                "INSERT INTO cliente(id,nome, dataDeNascimento, cpf) VALUES ( ?, ?, ?, ? );"
             );
             statement.setInt(1,cliente.getId());
             statement.setString(2, cliente.getNome());
-            statement.setDate(3,cliente.getDataDeNascimento());
+            statement.setDate(3, Date.valueOf(cliente.getDataDeNascimento()));
             statement.setString(4, cliente.getCpf());
             
             statement.executeUpdate();
@@ -93,10 +94,10 @@ public class ClientesEmJDBC implements Clientes {
     private Cliente criarClientes(ResultSet result) throws SQLException {
         int id = result.getInt("id");
         String nome = result.getString("nome");
-        Date dateNascimento = result.getDate("dataNascimento");
+        Date dataDeNascimento = result.getDate("dataDeNascimento");
         String cpf = result.getString("cpf");
         
-        return new Cliente(id,nome,dateNascimento,cpf);
+        return new Cliente(id,nome,dataDeNascimento,cpf);
     }
 
 }

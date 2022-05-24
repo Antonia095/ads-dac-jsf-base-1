@@ -5,6 +5,7 @@ import br.edu.ifpb.domain.Clientes;
 import br.edu.ifpb.infra.ClientesEmJDBC;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,14 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 
 
 // MCV - HTML (View) -> Servlet (Controller) -> Editora (Model)
-@WebServlet(name = "EditoraController", urlPatterns = "/editoras.do")
-public class EditoraController extends HttpServlet {
-    private Clientes editoras = new ClientesEmJDBC();
+@WebServlet(name = "ClienteController", urlPatterns = "/cliente.do")
+public class ClienteController extends HttpServlet {
+    private Clientes clientes = new ClientesEmJDBC();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //atendendo ao processamento
-        request.setAttribute("editoras",editoras.todas());
+        request.setAttribute("clientes",clientes.todas());
         //redicionar à página
         request.getRequestDispatcher("listar.jsp")
                 .forward(request, response); //mantendo a requisição original
@@ -30,11 +31,13 @@ public class EditoraController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         //atendendo ao processamento
-        String localDeOrigem = req.getParameter("localDeOrigem");
-        String nomeFantasia = req.getParameter("nomeFantasia");
-        clientes.nova(new Cliente(localDeOrigem, nomeFantasia));
+        int id = Integer.parseInt(req.getParameter("Id"));
+        String nome = req.getParameter("nome");
+        LocalDate dataDeNascimento = LocalDate.parse(req.getParameter("dataDeNascimento"));
+        String cpf = req.getParameter("cpf");
+        clientes.nova(new Cliente(id, nome, dataDeNascimento, cpf));
         //redicionar à página
-        resp.sendRedirect("editora.do"); //gerando uma nova requisição
+        resp.sendRedirect("cliente.do"); //gerando uma nova requisição
     }
 
     @Override
